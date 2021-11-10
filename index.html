@@ -1,0 +1,225 @@
+<html>
+
+<head>
+    <style>
+        /* * {} */
+
+        .parent {
+            width: 100vw;
+            height: 100vh;
+            background: #2980b9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .child {
+            width: 50vw;
+            height: 60vh;
+            background: #1abc9c;
+
+        }
+
+        #scale {
+            width: 10vw;
+            height: 60vh;
+            font-size: 2.6vh;
+            text-align: right;
+        }
+
+        /* for making div side by side */
+        .float-di {
+            width: 50%;
+            float: left;
+        }
+
+        #puck {
+            width: 18px;
+            height: 1px;
+            position: relative;
+            bottom: -56vh;
+            background-color: white;
+        }
+
+
+        #outer {
+            /* position: absolute; */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 10vw;
+            height: 59vh;
+            background: -webkit-gradient(linear, left top, left bottom, from(#0f0), to(#fa0));
+            background: -moz-linear-gradient(top, #0f0, #fa0);
+        }
+
+        #outer>div {
+            /* position: absolute; */
+            left: 35%;
+            bottom: 0px;
+            width: 30%;
+            height: 95%;
+            background-color: black;
+        }
+
+        .paddin {
+            padding-bottom: 2.5vh;
+        }
+
+        /* for score */
+        .grid-container {
+            display: grid;
+            justify-content: center;
+            grid-template-columns: 110px 30px 30px 30px 30px 30px 30px 30px 30px;
+            grid-gap: 10px;
+            background-color: #2196F3;
+            padding: 10px;
+        }
+
+        .grid-container>div {
+            background-color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            font-size: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <audio id="myAudio1">
+        <source src="1.wav" type="audio/mpeg">
+    </audio>
+    <audio id="myAudio2">
+        <source src="2.wav" type="audio/mpeg">
+    </audio>
+    <audio id="myAudio3">
+        <source src="3.wav" type="audio/mpeg">
+    </audio>
+    <audio id="myAudio4">
+        <source src="4.wav" type="audio/mpeg">
+    </audio>
+    <audio id="myAudio5">
+        <source src="5.wav" type="audio/mpeg">
+    </audio>
+    <div class="grid-container">
+        <div>SCORE:</div>
+        <div id="sc0">-</div>
+        <div id="sc1">-</div>
+        <div id="sc2">-</div>
+        <div id="sc3">-</div>
+        <div id="sc4">-</div>
+        <div id="sc5">-</div>
+        <div >=</div>
+        <div id="total">-</div>
+
+
+    </div>
+    <div class="parent">
+        <div class="child">
+
+            <div id="scale" class="float-di">
+                <div class="paddin">🔔 -</div>
+                <div class="paddin">9 -</div>
+                <div class="paddin">8 -</div>
+                <div class="paddin">7 -</div>
+                <div class="paddin">6 -</div>
+                <div class="paddin">5 -</div>
+                <div class="paddin">4 -</div>
+                <div class="paddin">3 -</div>
+                <div class="paddin">2 -</div>
+                <div class="paddin">1 -</div>
+                <div class="paddin">0 -</div>
+            </div>
+            <div id="outer" class="float-di">
+                <div>
+                    <div id="puck"></div>
+                </div>
+            </div>
+            <div id="chi">distance covered : </div>
+            <button onclick="myMove()">hit</button>
+            <button onclick="reset()">reset</button>
+
+
+        </div>
+    </div>
+
+
+</body>
+<script>
+    var myaudio5 = document.getElementById("myAudio5");
+    var id = null, i = 0;
+
+    var points = 0, sum = 0;
+    function myMove() {
+        var elem = document.getElementById("puck");
+        var paste = document.getElementById("chi");
+        var pos = 56;//bottom position
+        var rnum = Math.floor(Math.random() * 10 + 1);
+        // console.log(i," bahar")
+        if (i < 6) {
+        // console.log(i," andar")
+
+            var numinpx = 56 - rnum * 5.6;
+            paste.innerText = "distance covered : "+rnum;
+            console.log(numinpx, " the")
+            // clearInterval(id);
+            id = setInterval(frame, 10);
+            function frame() {
+                if (pos <= numinpx) {
+                    clearInterval(id);
+                    if (pos === 0)
+                        myaudio5.play();
+                } else {
+                    // console.log(pos);
+                    pos--;
+                    elem.style.top = pos + 'vh';
+                    elem.style.bottom = pos + 'vh';
+                }
+            }
+
+            if (rnum >= 1 && rnum <= 2) {
+                points = 1
+                document.getElementById("myAudio1").play();
+            }
+            else if(rnum >= 3 && rnum <= 5){
+                points=2;
+                document.getElementById("myAudio2").play();
+            }
+            else if(rnum >= 6 && rnum <= 7){
+                points=3;
+                document.getElementById("myAudio3").play();
+            }
+            else if(rnum >= 8 && rnum <= 9){
+                points=4;
+                document.getElementById("myAudio4").play();
+            }
+            else {
+                points=5;
+            }
+            sum+=points;
+            document.getElementById("sc"+i).innerText=points;
+            document.getElementById("total").innerText=sum;
+            i++;
+        }
+        else {
+            alert("please reset the game")
+        }
+
+
+    }
+
+    function reset() {
+        i=0;
+        points = 0, sum = 0;
+        for(var j=0;j<6;j++)
+        {
+            document.getElementById("sc"+j).innerText="-";
+        }
+        document.getElementById("chi").innerText = "distance covered : ";
+
+    }
+
+
+
+</script>
+
+</html>
